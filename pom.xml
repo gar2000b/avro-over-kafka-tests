@@ -1,0 +1,244 @@
+<?xml version="1.0"?>
+<project
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+    xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.onlineinteract</groupId>
+    <artifactId>avro-over-kafka-tests</artifactId>
+    <packaging>jar</packaging>
+    <name>avro-over-kafka-tests</name>
+    <description>Data Services AVRO over Kafka Test Rig</description>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <properties>
+        <!-- source encoding and java version -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+
+        <!-- spring boot -->
+        <org.springframework-version>4.3.2.RELEASE</org.springframework-version>
+        <spring-boot-version>1.5.4.RELEASE</spring-boot-version>
+
+        <!-- logging -->
+        <org.slf4j-version>1.7.21</org.slf4j-version>
+        <ch.qos.logback-version>1.1.8</ch.qos.logback-version>
+        <janino-version>2.7.8</janino-version>
+
+        <!-- elasticsearch -->
+        <elasticsearch.version>5.4.2</elasticsearch.version>
+
+        <!-- kafka -->
+        <kafka-version>0.11.0.0</kafka-version>
+
+        <!-- serialization -->
+        <jackson-2-version>2.8.7</jackson-2-version>
+        <com.opencsv>4.0</com.opencsv>
+
+        <!-- swagger -->
+        <springfox-swagger2.version>2.6.1</springfox-swagger2.version>
+        <commons-lang-version>2.4</commons-lang-version>
+        <guava.version>20.0</guava.version>
+
+        <!-- testing -->
+        <junit-version>4.12</junit-version>
+        <org.mockito-version>2.10.0</org.mockito-version>
+
+        <!-- Used by Jenkins to run and publish Sonar analysis to SonarQube. -->
+        <!-- Jenkins specifies SonarQube URL via JVM system property in order 
+            to -->
+        <!-- keep environment data separate from codebase. -->
+        <jacoco-maven-plugin.version>0.7.8</jacoco-maven-plugin.version>
+        <sonar-maven-plugin.version>3.2</sonar-maven-plugin.version>
+        <maven-javadoc-plugin.version>2.10.4</maven-javadoc-plugin.version>
+        
+        <!-- Avro -->
+        <avro.version>1.8.1</avro.version>
+        
+        <skipTests>true</skipTests>
+        
+        <confluent.version>3.2.0</confluent.version>
+        
+    </properties>
+    
+    <repositories>
+        <repository>
+            <id>confluent</id>
+            <name>Confluent Releases</name>
+            <url>http://packages.confluent.io/maven</url>
+        </repository>
+    </repositories>
+    
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.avro</groupId>
+                    <artifactId>avro-maven-plugin</artifactId>
+                    <version>${avro.version}</version>
+                </plugin>
+                <!--This plugin's configuration is used to store Eclipse 
+                    m2e settings only. It has no influence on the Maven build itself. -->
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.apache.avro</groupId>
+                                        <artifactId>
+                                            avro-maven-plugin
+                                        </artifactId>
+                                        <versionRange>
+                                            [1.8.1,)
+                                        </versionRange>
+                                        <goals>
+                                            <goal>schema</goal>
+                                            <goal>protocol</goal>
+                                            <goal>idl-protocol</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <execute>
+                                            <runOnIncremental>true</runOnIncremental>
+                                        </execute>
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot-version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+<!-- uncomment to generate avro source -->
+            <plugin>
+                <groupId>org.apache.avro</groupId>
+                <artifactId>avro-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>schema</goal>
+                            <goal>protocol</goal>
+                            <goal>idl-protocol</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirectory>${project.basedir}/src/main/resources/avro</sourceDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    <!-- Import dependency management from Spring Boot -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot-version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+    
+        <!-- Logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${org.slf4j-version}</version>
+        </dependency>
+
+        <!-- testing -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit-version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${org.mockito-version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${org.springframework-version}</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>${com.opencsv}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
+            <version>${kafka-version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.avro</groupId>
+            <artifactId>avro</artifactId>
+            <version>${avro.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>io.confluent</groupId>
+            <artifactId>kafka-avro-serializer</artifactId>
+            <version>${confluent.version}</version>
+        </dependency>
+    </dependencies>
+    
+    <!-- ######################################## -->
+    <!-- javadoc errors -->
+    <!-- ######################################## -->
+    <profiles>
+        <profile>
+            <id>disable-java8-doclint</id>
+            <activation>
+                <jdk>[1.8,)</jdk>
+            </activation>
+            <properties>
+                <additionalparam>-Xdoclint:none</additionalparam>
+            </properties>
+        </profile>
+    </profiles>
+</project>

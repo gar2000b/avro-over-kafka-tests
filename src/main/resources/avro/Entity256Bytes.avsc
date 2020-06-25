@@ -1,0 +1,10 @@
+{"namespace": "com.onlineinteract.model.avro",
+ "type": "record",
+ "name":"Entity256Bytes",
+ "fields": [
+	{"name":"name","type": "string"},
+	{"name":"intValue","type": "int"},
+	{"name":"longvalue","type": "long"},
+	{"name":"floatValue","type": "float"}
+  ]
+}
