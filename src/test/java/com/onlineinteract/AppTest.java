@@ -150,25 +150,25 @@ public class AppTest {
         return false;
     }
 
-    private void createConsumer() {
-        Properties buildProperties = buildConsumerProperties();
-        consumer = new KafkaConsumer<>(buildProperties);
-        consumer.subscribe(Arrays.asList("uj40-d-avro-test-2"));
-    }
-
-    private Properties buildConsumerProperties() {
-        Properties properties = new Properties();
-        properties.put("bootstrap.servers", "localhost:9002");
-        // properties.put("group.id", "consumer-group-avro-test");
-        properties.put("group.id", "test-consumer-group");
-        properties.put("enable.auto.commit", "false");
-        properties.put("max.poll.records", "1");
-        properties.put("key.deserializer", LongDeserializer.class);
-        properties.put("value.deserializer", KafkaAvroDeserializer.class);
-        properties.put("schema.registry.url", "http://localhost:9093");
-        properties.put("specific.avro.reader", "true");
-        return properties;
-    }
+//    private void createConsumer() {
+//        Properties buildProperties = buildConsumerProperties();
+//        consumer = new KafkaConsumer<>(buildProperties);
+//        consumer.subscribe(Arrays.asList("uj40-d-avro-test-2"));
+//    }
+//
+//    private Properties buildConsumerProperties() {
+//        Properties properties = new Properties();
+//        properties.put("bootstrap.servers", "localhost:9002");
+//        // properties.put("group.id", "consumer-group-avro-test");
+//        properties.put("group.id", "test-consumer-group");
+//        properties.put("enable.auto.commit", "false");
+//        properties.put("max.poll.records", "1");
+//        properties.put("key.deserializer", LongDeserializer.class);
+//        properties.put("value.deserializer", KafkaAvroDeserializer.class);
+//        properties.put("schema.registry.url", "http://localhost:9093");
+//        properties.put("specific.avro.reader", "true");
+//        return properties;
+//    }
 
     private void createProducer() {
         Properties producerProps = buildProducerProperties();
