@@ -44,7 +44,7 @@
         <guava.version>20.0</guava.version>
 
         <!-- testing -->
-        <junit-version>4.12</junit-version>
+        <junit-version>4.13.1</junit-version>
         <org.mockito-version>2.10.0</org.mockito-version>
 
         <!-- Used by Jenkins to run and publish Sonar analysis to SonarQube. -->
